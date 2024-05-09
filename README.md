@@ -40,3 +40,148 @@ gl.clear(gl.DEPTH_BUFFER_BIT) 和 gl.clearDepth(1.0)
 gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
 
 ```
+
+#### WEBGL绘制一个点
+
+通过 WEBGL 作绘图的时候所有图形的绘制操作都需要着色器来实现
+
+着色器定义：让开发者自己去边写一段程序，用来代替固定渲染管线，来处理图像的渲染。
+
+着色器分类：
+
+1. 定点着色器：用来描述顶点的特性，通过计算获取位置信息
+    顶点：是指二维三维空间中的一个点，可以理解为一个个坐标
+
+2. 片元着色器：进行逐片元处理程序，通过计算获取颜色信息
+    片元：可以理解为一个个像素
+
+着色器工作流程：
+    1. 获取<canvas>元素
+
+    ``` JAVASCRIPT
+    const ctx = document.getElementById('canvas')
+    ```
+
+    2. 获取 webgl 绘图上下文
+
+    ``` JAVASCRIPT
+    const gl = ctx.getContext('webgl')
+    ```
+
+    3. 初始化顶点着色器源程序
+
+    ``` JAVASCRIPT
+    const VERTEX_SHADER_SOURCE = `
+        // 必须要存在 main 函数 (入口函数)
+        void main() {
+            //  要绘制的点的坐标
+            //  vec4(0.0, 0.0, 0.0, 1.0)代表的是 x, y, z, w(齐次坐标)
+            //  齐次坐标可以理解成(x/w, y/w, z/w)
+            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+            //  点的大小
+            gl_PointSize = 30.0;
+        }
+    `; // 顶点着色器
+    ```
+    注意事项：这里 void main 里面的分号不能省略，否则程序会报错
+
+    4. 初始化片元着色器源程序
+
+    ``` JAVASCRIPT
+    const FRAGMENT_SHADER_SOURCE = `
+        // 必须要存在 main 函数 (入口函数)
+        void main() {
+            //  绘制的点的颜色
+            //  vec4(1.0, 0.0, 0.0, 1.0)代表的是r,g,b,a
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+    `; // 片元着色器
+    ```
+    注意事项：这里 void main 里面的分号不能省略，否则程序会报错
+
+    5. 创建顶点着色器
+
+    ``` JAVASCRIPT
+    const vertexShader = gl.createShader(gl.VERTEX_SHADER)
+    ```
+
+    6. 创建片元着色器
+
+    ``` JAVASCRIPT
+    const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
+    ```
+
+    7. 关联着色器和着色器源码
+
+    ``` JAVASCRIPT
+    gl.shaderSource(vertexShader, VERTEX_SHADER_SOURCE)
+    gl.shaderSource(fragmentShader, FRAGMENT_SHADER_SOURCE)
+    ```
+
+    8. 编译着色器
+
+    ``` JAVASCRIPT
+    gl.compileShader(vertexShader)
+    gl.compileShader(fragmentShader)
+    ```
+
+    9. 创建 program
+
+    ``` JAVASCRIPT
+    const program = gl.createProgram()
+    ```
+
+    10. 关联着色器 和 program
+
+    ``` JAVASCRIPT
+    //  关联着色器
+    gl.attachShader(program, vertexShader)
+    gl.attachShader(program, fragmentShader)
+
+    //  关联程序
+    gl.linkProgram(program)
+    ```
+
+    11. 使用 program
+
+    ``` JAVASCRIPT
+    gl.useProgram(program)
+    ```
+
+    12. 绘图
+
+    ``` JAVASCRIPT
+    gl.drawArrays(gl.POINTS, 0, 1)
+    ```
+
+    对创建 Shader 部分进行一个封装
+
+    ``` JAVASCRIPT
+    function initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE) {
+        //  创建着色器
+        const vertexShader = gl.createShader(gl.VERTEX_SHADER)
+        const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
+
+        gl.shaderSource(vertexShader, VERTEX_SHADER_SOURCE) // 指定顶点着色器的源码
+        gl.shaderSource(fragmentShader, FRAGMENT_SHADER_SOURCE) // 指定片元着色器的源码
+
+        //  编译着色器
+        gl.compileShader(vertexShader)
+        gl.compileShader(fragmentShader)
+
+        //  创建一个程序对象
+        const program = gl.createProgram();
+
+        gl.attachShader(program, vertexShader)
+        gl.attachShader(program, fragmentShader)
+
+        //  关联程序
+        gl.linkProgram(program)
+        
+        //  使用程序
+        gl.useProgram(program)
+
+        return program;
+    }
+    ```
+

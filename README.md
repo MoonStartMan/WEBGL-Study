@@ -56,21 +56,21 @@ gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
     片元：可以理解为一个个像素
 
 着色器工作流程：
-    1. 获取<canvas>元素
+1.获取canvas元素
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     const ctx = document.getElementById('canvas')
-    ```
+```
 
-    2. 获取 webgl 绘图上下文
+2.获取 webgl 绘图上下文
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     const gl = ctx.getContext('webgl')
-    ```
+```
 
-    3. 初始化顶点着色器源程序
+3.初始化顶点着色器源程序
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     const VERTEX_SHADER_SOURCE = `
         // 必须要存在 main 函数 (入口函数)
         void main() {
@@ -82,12 +82,13 @@ gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
             gl_PointSize = 30.0;
         }
     `; // 顶点着色器
-    ```
-    注意事项：这里 void main 里面的分号不能省略，否则程序会报错
+```
 
-    4. 初始化片元着色器源程序
+注意事项：这里 void main 里面的分号不能省略，否则程序会报错
 
-    ``` JAVASCRIPT
+4.初始化片元着色器源程序
+
+``` JAVASCRIPT
     const FRAGMENT_SHADER_SOURCE = `
         // 必须要存在 main 函数 (入口函数)
         void main() {
@@ -96,67 +97,68 @@ gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
             gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
         }
     `; // 片元着色器
-    ```
-    注意事项：这里 void main 里面的分号不能省略，否则程序会报错
+```
 
-    5. 创建顶点着色器
+注意事项：这里 void main 里面的分号不能省略，否则程序会报错
 
-    ``` JAVASCRIPT
+5.创建顶点着色器
+
+``` JAVASCRIPT
     const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-    ```
+```
 
-    6. 创建片元着色器
+6.创建片元着色器
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
-    ```
+```
 
-    7. 关联着色器和着色器源码
+7.关联着色器和着色器源码
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     gl.shaderSource(vertexShader, VERTEX_SHADER_SOURCE)
     gl.shaderSource(fragmentShader, FRAGMENT_SHADER_SOURCE)
-    ```
+```
 
-    8. 编译着色器
+8.编译着色器
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     gl.compileShader(vertexShader)
     gl.compileShader(fragmentShader)
-    ```
+```
 
-    9. 创建 program
+9.创建 program
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     const program = gl.createProgram()
-    ```
+```
 
-    10. 关联着色器 和 program
+10.关联着色器 和 program
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     //  关联着色器
     gl.attachShader(program, vertexShader)
     gl.attachShader(program, fragmentShader)
 
     //  关联程序
     gl.linkProgram(program)
-    ```
+```
 
-    11. 使用 program
+11.使用 program
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     gl.useProgram(program)
-    ```
+```
 
-    12. 绘图
+12.绘图
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     gl.drawArrays(gl.POINTS, 0, 1)
-    ```
+```
 
-    对创建 Shader 部分进行一个封装
+对创建 Shader 部分进行一个封装
 
-    ``` JAVASCRIPT
+``` JAVASCRIPT
     function initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE) {
         //  创建着色器
         const vertexShader = gl.createShader(gl.VERTEX_SHADER)
@@ -183,5 +185,4 @@ gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
 
         return program;
     }
-    ```
-
+```

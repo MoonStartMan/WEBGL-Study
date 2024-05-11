@@ -221,3 +221,42 @@ gl.vertexAttrib4f(location,v1,v2,v3,v4) location:指定 attribute 变量的存�
 3.转换为 canvas 坐标
 4.转换为 webgl 坐标
 5.绘图
+
+#### 修改点的颜色
+
+使用 uniform 变量
+
+添加 uniorm 变量，设置到颜色上
+
+获取 uniform 变量存储地址
+
+``` JAVASCRIPT
+const uColor = gl.getUniformLocation(program, 'uColor')
+```
+
+program: 包含顶点和片元着色器的程序对象
+name: uniform 变量的名称
+
+给 uniform 变量赋值
+
+``` JAVASCRIPT
+gl.uniform4f(uColor, 1.0, 0.0, 0.0, 1.0)
+```
+
+location: 指定 uniform 的存储地址
+v0,v1,v2,v3:第 1，2,3,4 分量的值。
+
+uniform 使用的时候必须要设置精度
+
+设置精度：
+
+``` JAVASCRIPT
+precision mediump float 
+```
+
+高精度: highp, 低精度: lowp
+
+使用 uniform 流程
+
+1. 获取 canvas 元素 2. 获取 webgl 绘图上下文 3. 初始化顶点着色器源程序 4. 初始化片元着色器源程序
+5. 创建顶点着色器 6. 创建片元着色器 7. 关联着色器和着色器源码 8. 编译着色器 8. 创建 program 9. 关联着色器和 program 10. 说用 program 11. 获取 uniform 变量 12. 给 uniform 变量赋值 13. 绘图

@@ -186,3 +186,31 @@ gl.clear(gl.SEENCIL_BUFFER_BIT) 和 gl.clearStencil(0)
         return program;
     }
 ```
+
+#### 获取 attribute 变量
+
+``` JAVASCRIPT
+const aPosition = gl.getAttribLocation(program, 'aPosition')
+```
+
+注意事项：获取 attribute 变量需要在 initShader 函数之后，因为会用到 program 这个程序对象。
+
+gl.getAttribLocation: 作用于 program 程序对象，参数有 name和 attribute
+其中 name 为指定想要获取存储地址的 attribute 为变量的名称
+返回变量的存储地址
+
+``` JAVASCRIPT
+gl.vertexAttrib4f(location,v1,v2,v3,v4)
+```
+
+vertextAttrib3f()同族函数介绍
+
+``` JAVASCRIPT
+gl.vertexAttrib1f(location, v0)
+gl.vertexAttrib2f(location, v0, v1)
+gl.vertexAttrib3f(location, v0, v1, v2)
+gl.vertexAttrib4f(location, v0, v1, v2, v3)
+```
+
+gl.vertexAttrib4f(location,v1,v2,v3,v4) location:指定 attribute 变量的存储位置 v0,v1,v2,v3:传入的四个分量的值
+

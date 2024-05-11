@@ -214,3 +214,10 @@ gl.vertexAttrib4f(location, v0, v1, v2, v3)
 
 gl.vertexAttrib4f(location,v1,v2,v3,v4) location:指定 attribute 变量的存储位置 v0,v1,v2,v3:传入的四个分量的值
 
+#### 通过鼠标控制
+
+1.添加点击事件
+2.获取点击坐标
+3.转换为 canvas 坐标
+4.转换为 webgl 坐标
+5.绘图

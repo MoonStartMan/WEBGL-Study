@@ -258,5 +258,17 @@ precision mediump float
 
 使用 uniform 流程
 
-1. 获取 canvas 元素 2. 获取 webgl 绘图上下文 3. 初始化顶点着色器源程序 4. 初始化片元着色器源程序
-5. 创建顶点着色器 6. 创建片元着色器 7. 关联着色器和着色器源码 8. 编译着色器 8. 创建 program 9. 关联着色器和 program 10. 说用 program 11. 获取 uniform 变量 12. 给 uniform 变量赋值 13. 绘图
+1.获取 canvas 元素
+2.获取 webgl 绘图上下文
+3.初始化顶点着色器源程序
+4.初始化片元着色器源程序
+5.创建顶点着色器
+6.创建片元着色器
+7.关联着色器和着色器源码
+8.编译着色器
+9.创建 program
+10.关联着色器和program
+11.使用program
+12.获取uniform变量
+13.给uniform变量赋值
+14.绘图

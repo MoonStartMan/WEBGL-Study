@@ -396,3 +396,45 @@ gl.drawArrays(gl.POINTS, 0, 3);
 | gl.TRIANGLE_STRIP | 三角形 | 一系列条带状的三角形 |
 | gl.TRIANGLE_FAN | 三角形 | 飘带状三角形 |
 
+#### 图形平移 - 着色器
+
+``` JAVASCRIPT
+const ctx = document.getElementById('canvas')
+const gl = ctx.getContext('webgl')
+const VERTEX_SHADER_SOURCE = `
+    attribute vec4 aPosition;
+    attribute float aTranslate;
+    void main() {
+        gl_Position = vec4(aPosition.x + aTranslate, aPosition.y, aPosition.z, 1.0);
+        gl_PointSize = 10.0;
+    }
+`;
+const FRAGMENT_SHADER_SOURCE = `
+    void main() {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`;
+const program = initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE)
+const aPosition = gl.getAttribLocation(program, 'aPosition')
+const aTranslate = gl.getAttribLocation(program, 'aTranslate')
+const points = new Float32Array([
+    -0.5, -0.5,
+    0.5, -0.5,
+    0.0, 0.5
+])
+const buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);
+gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+gl.enableVertexAttribArray(aPosition);
+let x = -1;
+setInterval(() => {
+    x += 0.01;
+    if (x > 1) {
+        x = -1;
+    }
+    gl.vertexAttrib1f(aTranslate, x);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+}, 60)
+```
+

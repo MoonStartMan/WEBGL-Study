@@ -344,3 +344,43 @@ gl.enableVertexAttribArray(location)
 将缓冲区对象分配给一个 attribute 变量
 开启 attribute 变量
 绘图
+
+#### 多缓冲区和数据偏移
+
+```JAVASCRIPT
+const ctx = document.getElementById('canvas')
+const gl = ctx.getContext('webgl')
+/// 着色器
+/// 创建着色器源码
+const VERTEX_SHADER_SOURCE = `
+    attribute vec4 aPosition;
+    attribute float aPointSize;
+    void main() {
+        gl_Position = aPosition;
+        gl_PointSize = aPointSize;
+    }
+`; // 顶点着色器
+const FRAGMENT_SHADER_SOURCE = `
+    void main() {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`; // 片元着色器
+const program = initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE)
+const aPosition = gl.getAttribLocation(program, 'aPosition');
+const aPointSize = gl.getAttribLocation(program, 'aPointSize');
+const points = new Float32Array([
+    -0.5, -0.5, 10.0,
+    0.5, -0.5, 20.0,
+    0.0, 0.5, 30.0
+])
+const buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);
+const BYTES = points.BYTES_PER_ELEMENT;
+gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, BYTES * 3, 0);
+gl.enableVertexAttribArray(aPosition);
+gl.vertexAttribPointer(aPointSize, 1, gl.FLOAT, false, BYTES * 3, BYTES * 2);
+gl.enableVertexAttribArray(aPointSize);
+gl.drawArrays(gl.POINTS, 0, 3);
+```
+

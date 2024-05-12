@@ -272,3 +272,75 @@ precision mediump float
 12.获取uniform变量
 13.给uniform变量赋值
 14.绘图
+
+### 多图形绘制和动画
+
+#### 缓冲区对象
+
+缓冲区对象是 WEBGL 系统中的一块内存区域，可以一次性地向缓冲区对象中填充大量的顶点数据，然后将这些数据保存在其中，供顶点着色器使用。
+
+类型化数组: Float32Array
+
+在 webgl 中，需要处理大量的相同类型数据，所以引入类型化数组，这样程序就可以预知到数组中的数据类型，提高性能。
+
+``` JAVASCRIPT
+const points = new Float32Array([
+    -0.5, -0.5,
+    0.5, -0.5,
+    0.0, 0.5
+])
+```
+
+类型化数组有：Int8Array: 8位整型，UInt8Array:8位无符号整型，Int16Array:16位整型，UInt16Array:16 位无符号整型，Int32Array:32位整型，UInt32Array:32位无符号整型，Float32Array:单精度32位浮点型，Float64Array:双精度64位浮点型。
+
+创建缓冲区对象
+
+``` JAVASCRIPT
+const buffer = gl.createBuffer();
+```
+
+``` JAVASCRIPT
+gl.bindBuffer(target, buffer)
+//    buffer: 已经创建好的缓冲区对象
+//    target: 可以是如下两种 -> 
+//    gl.ARRAY_BUFFER:表示缓冲区存储的是顶点的数据。
+//    gl.ELEMENT_ARRAY_BUFFER:表示缓冲区存储的是顶点的索引值。
+```
+
+``` JAVASCRIPT
+gl.bufferData(target, data, type)
+//    target: 类型同 gl.bindBuffer 中的 target
+//    data: 写入缓冲区的顶点数据，如程序中的 points
+//    type: 表示如何使用缓冲区对象中的数据，分为以下几类
+//    gl.STATIC_DRAW: 写入一次，多次绘制
+//    gl.STREAM_DRAW: 写入一次，绘制若干次
+//    gl.DYNAMIC_DRAW: 写入多次，绘制多次
+```
+
+``` JAVASCRIPT
+gl.vertextAttribPointer(location, size, type, normalized, stride, offset)
+//    location: attribute变量的存储位置
+//    size: 指定每个顶点所使用数据的个数
+//    type: 指定数据格式 gl.FLOAT: 浮点型、gl.UNSIGNED_BYTE:无符号字节、gl.SHORT:短整型、gl.UNSIGNED_SHORT:无符号短整型、gl.INT:整型、gl.UNSIGNED_INT:无符号整型
+//    normalized: 表示是否将数据归一化到[0,1][-1,1]这个区间
+//    stride: 两个相邻顶点之间的字节数
+//    offset: 数据偏移量
+```
+
+``` JAVASCRIPT
+gl.enableVertexAttribArray(location)
+//    location: attribute 变量的存储地址
+//    gl.disableVertexAttribArray(aPosition);使用此方法禁用
+
+```
+
+缓冲区使用流程
+
+获取 canvas 元素 - 初始化程序对象
+创建顶点数据
+创建缓冲区对象
+绑定缓冲区对象
+将数据写入缓冲区对象
+将缓冲区对象分配给一个 attribute 变量
+开启 attribute 变量
+绘图

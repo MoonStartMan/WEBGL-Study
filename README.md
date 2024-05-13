@@ -531,3 +531,58 @@ location: 指定 uniform 变量的存储位置
 transpose: 在 webgl 中恒位 false
 array: 矩阵数组
 
+#### 图形缩放-缩放矩阵
+
+``` JAVASCRIPT
+const ctx = document.getElementById('canvas')
+const gl = ctx.getContext('webgl')
+/// 着色器
+/// 创建着色器源码
+const VERTEX_SHADER_SOURCE = `
+    attribute vec4 aPosition;
+    uniform mat4 mat;
+    void main() {
+        gl_Position = mat * aPosition;
+        gl_PointSize = 10.0;
+    }
+`; // 顶点着色器
+const FRAGMENT_SHADER_SOURCE = `
+    void main() {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+`; // 片元着色器
+const program = initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE)
+const aPosition = gl.getAttribLocation(program, 'aPosition')
+const mat = gl.getUniformLocation(program, 'mat')
+function getScaleMatrix(x = 1, y = 1, z = 1) {
+    return new Float32Array([
+        x  , 0.0, 0.0, 0.0,
+        0.0, y  , 0.0, 0.0,
+        0.0, 0.0, z  , 0.0,
+        0.0, 0.0, 0.0,   1,
+    ])
+}
+const points = new Float32Array([
+    -0.5, -0.5,
+    0.5, -0.5,
+    0.0, 0.5
+])
+const buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);
+gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+gl.enableVertexAttribArray(aPosition);
+let x = 0.1;
+function animation() {
+    x += 0.01;
+    if (x > 1.5) {
+        x = 0.1;
+    }
+    const matrix = getScaleMatrix(x, x);
+    gl.uniformMatrix4fv(mat, false, matrix);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    requestAnimationFrame(animation)
+}
+animation()
+```
+

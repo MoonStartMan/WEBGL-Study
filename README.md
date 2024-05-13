@@ -588,3 +588,17 @@ animation()
 
 #### 图形旋转-旋转矩阵
 
+``` JAVASCRIPT
+//  绕z轴旋转的旋转矩阵
+function getRotateMatrix(deg) {
+    return new Float32Array([
+         Math.cos(deg),  Math.sin(deg), 0.0, 0.0,
+        -Math.sin(deg), -Math.cos(deg), 0.0, 0.0,
+        0.0,             0.0,           0.0, 0.0,
+        0.0,             0.0,           0.0, 1,
+    ])
+}
+```
+
+#### 图形复合变换-矩阵组合
+

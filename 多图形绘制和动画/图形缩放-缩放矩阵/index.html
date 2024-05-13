@@ -51,15 +51,6 @@
     const aPosition = gl.getAttribLocation(program, 'aPosition')
     const mat = gl.getUniformLocation(program, 'mat')
 
-    function getScaleMatrix(x = 1, y = 1, z = 1) {
-        return new Float32Array([
-            x  , 0.0, 0.0, 0.0,
-            0.0, y  , 0.0, 0.0,
-            0.0, 0.0, z  , 0.0,
-            0.0, 0.0, 0.0,   1,
-        ])
-    }
-
     const points = new Float32Array([
         -0.5, -0.5,
         0.5, -0.5,

@@ -67,14 +67,14 @@
 
     gl.enableVertexAttribArray(aPosition);
 
-    let x = -1;
+    let x = 0.1;
 
     function animation() {
         x += 0.01;
-        if (x > 1) {
-            x = -1;
+        if (x > 1.5) {
+            x = 0.1;
         }
-        const matrix = getTranslateMatrix(x, x);
+        const matrix = getRotateMatrix(x);
         gl.uniformMatrix4fv(mat, false, matrix);
         gl.drawArrays(gl.TRIANGLES, 0, 3);
         requestAnimationFrame(animation)

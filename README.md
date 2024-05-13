@@ -523,3 +523,11 @@ function animation() {
 animation();
 ```
 
+#### 图形平移-平移矩阵
+
+gl.uniformMatrix4fv(location, transpose, array)
+
+location: 指定 uniform 变量的存储位置
+transpose: 在 webgl 中恒位 false
+array: 矩阵数组
+

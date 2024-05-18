@@ -643,3 +643,60 @@ gl.enableVertexAttribArray(aPosition);
 gl.drawArrays(gl.TRIANGLES, 0, 3);
 ```
 
+#### WEBGL渲染流程
+
+1.设置顶点坐标：将独立的顶点坐标装配成几何图形，图形的类别由 gl.drawArrays()第一个参数确定
+2.图元装配：将装配好的图形转换为片元
+3.光栅化
+4.图形绘制
+
+#### 给图形添加背景图
+
+创建纹理对象
+
+``` JAVASCRIPT
+const texture = gl.createTexture();
+```
+
+删除纹理对象
+
+``` JAVASCRIPT
+gl.deleteTexture(textrue)
+```
+
+进行Y轴翻转
+
+``` JAVASCRIPT
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+```
+
+开启(激活)纹理单元
+WEBGL 是通过纹理单元来管理纹理对象，每个纹理单元管理一张纹理图像。
+
+``` JAVASCRIPT
+gl.activeTexture(gl.TEXTURE0)
+```
+
+``` JAVASCRIPT
+gl.bindTexture(type, texture)
+// type 参数有两种：gl.TEXTURE_2D: 二维纹理, gl.TEXTURE_CUBE_MAP:立方体纹理
+// texture: 纹理对象
+```
+
+``` JAVASCRIPT
+gl.texParamteri(type, pname, param)
+//  type 参数有两种：gl.TEXTURE_2D: 二维纹理, gl.TEXTURE_CUBE_MAP:立方体纹理
+//  pname 参数: gl.TEXTURE_MAG_FILTER 放大, gl.TEXTURE_MIN_FILTER 缩小, gl.TEXTURE_WRAP_S横向(水平填充), gl.TEXTURE_WRAP_T 纵向(垂直填充)
+//  param: gl.NEAREST 使用像素颜色值，gl.LINEAR: 使用四周的加权平均值, gl.REPEAT: 平铺重复, gl.MIRRORED_REPEAT: 镜像对称, gl.CLAMP_TO_EDGE: 边缘延伸
+//  
+```
+
+``` JAVASCRIPT
+gl.texImage2D(type, level, internalformat, format, dataType, image)
+//  type 参数有两种：gl.TEXTURE_2D: 二维纹理, gl.TEXTURE_CUBE_MAP:立方体纹理
+//  level 为 0 即可
+//  internalformat: gl.RGB, gl.RGBA, gl.ALPHA, gl.LUMINANCE:使用物体表面的红绿蓝 分量的加权平均值来计算, gl.LUMINANCE_ALPHA
+//  format: 纹理的内部格式，必须和 internalformat 相同
+//  dataType: 纹理数据的数据类型 gl.UNSIGNED_BYTE, gl.UNSIGNED_SHORT_5_6_5, gl.UNSIGNED_SHORT_4_4_4_4, gl.UNSIGNED_SHORT_5_5_5_1
+//  image 图片对象
+```

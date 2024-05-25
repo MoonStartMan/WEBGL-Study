@@ -700,3 +700,119 @@ gl.texImage2D(type, level, internalformat, format, dataType, image)
 //  dataType: 纹理数据的数据类型 gl.UNSIGNED_BYTE, gl.UNSIGNED_SHORT_5_6_5, gl.UNSIGNED_SHORT_4_4_4_4, gl.UNSIGNED_SHORT_5_5_5_1
 //  image 图片对象
 ```
+
+### OpenGL ES 语法
+
+#### 语言基础
+
+``` JavaScript
+/// 1. 语言基础
+///     大小写敏感
+///     强制分号
+/// 2. 程序入口: 着色器语言通过 main 函数作为程序入口,且没有任何返回值
+void main() {}
+/// 3. 注释: 与 JavaScript 相同
+/// 4. 强制型语言: 变量的使用和赋值必须是相同类型,需要时刻注意变量的类型
+/// 5. 变量声明: <类型><变量名称>
+///    数字字母下划线
+///    不能以数字开头
+///    不能是关键字或保留字
+///    不能以 gl_、webgl_、_webgl_作为开头
+/// 6. 类型和类型转换
+///     int()此方法将数据转换为整型
+///     float()转为浮点型
+///     bool()转为布尔值
+/// 7. 运算符
+
+```
+
+#### 矢量和矩阵
+
+``` JavaScript
+/// 矢量
+vec2、vec3、vec4//  具有 2,3,4 个浮点数元素的矢量
+ivec2、ivec3、ivec4//   具有 2,3,4 个整型元素的矢量
+bvec2、bvec3、bvec4//   具有 2，3,4 个布尔值元素的矢量
+/// 赋值
+vec4 position = vec4(0.0, 0.0, 0.0, 1.0);   //  vec4就是矢量的构造函数
+/// 访问矢量里的分量
+///     访问分量: x,y,z,w 访问顶点坐标的分量
+///              s,t,p,q 访问纹理坐标的分量
+vec4 position = vec4(0.1, 0.2, 0.3, 1.0);
+
+position.x  //  0.1
+position.y  //  0.2
+position.z  //  0.3
+/// 也可以通过混合的方式获取多个值，获取到一个新的矢量内容
+vec4 position = vec4(0.1, 0.2, 0.3, 1.0);
+
+position.xy //  vec2(0.1, 0.2)
+position.yx //  vec2(0.2, 0.1)
+position.zyx // vec3(0.3, 0.2, 0.1)
+/// 矩阵
+mat2、mat3、mat4//  2*2, 3*3, 4*4的浮点数元素矩阵
+/// 赋值: 矩阵入参,注意:矩阵参数是列主序的
+mat4 m = mat4(
+    1.0, 5.0, 9.0, 13.0,
+    2.0, 6.0, 10.0, 14.0,
+    3.0, 7.0, 12.0, 15.0,
+    4.0, 8.0, 13.0, 16.0,
+);
+
+```
+
+#### 纹理取样器
+
+``` JavaScript
+
+/// 取样器有两种:sampler2D 和 samplerCube
+/// 只能声明为 uniform 变量
+///     声明二维纹理: uniform sampler2D uSampler;
+///     立方体纹理: uniform samplerCube uSamplerCube;
+
+```
+
+#### 分支和循环
+
+``` JavaScript
+
+// 分支逻辑: if(){} 和 if(){} else {}
+// 分支逻辑: if(){} else if(){} else
+// 循环语句: for() {} while() {} do{} while()
+// 跳出循环: continue、break的使用方法和 JavaScript 相同,
+//          discard只能在片元着色器中使用,表示放弃当前片元直接处理下一个片元。
+
+```
+
+#### 内置函数
+
+角度函数: radians角度转弧度, degress弧度转角度
+三角函数: sin 正弦, cos 余弦, tan 正切, asin 反正弦, acos 反余弦, atan 反正切
+指数函数: pow 次方, exp 自然质数, log 对数, sqrt 开平方, inversesqrt 开平方的倒数
+通用函数: abs 绝对值, min 最小值, max 最大值, mod 取余数, sign 取符号, floor 向下取整, ceil 向上取整, clamp 限定范围, fract 获取小数部分
+几何函数: length(x)计算向量 x 的长度, distance(x, y)计算向量 xy 之间的距离, dot(x, y)计算向量 xy 的点积, cross(x, y)计算向量 xy 的差积, normalize(x)返回方向同 x, 长度为 1 的向量。
+
+#### 存储限定词
+
+``` JavaScript
+
+const// 声明一个常量，定义之后不能被改变
+attribute// 只能出现在顶点着色器中，只能声明为全局变量，表示逐顶点信息。单个顶点的信息。
+uniform//   可同时出现在顶点着色器和片元着色器中，只读类型，强调一致性，用来存储的是影响所有顶点的数据。如变换矩阵。
+varying//   从顶点着色器向片元着色器传递数据
+
+```
+
+精度限定：提升运行效率，削减内存开支。
+可以单独针对某个变量声明精度。mediump float f;
+劣势：会出现精度歧义，也不利于后期维护。
+
+第二种方法：通过 precision 关键字来修改着色器的默认精度
+
+``` JavaScript
+
+precision mediump float;
+/// 高精度: highp, 中精度: mediump, 低精度: lowp
+/// 什么时候使用精度限定: 片元着色器中的 float 类型没有默认精度，所以如果需要在片元着色器中使用浮点类型数据的时候,需要修改默认精度。
+
+```
